@@ -1,0 +1,8 @@
+{
+    "report": {
+      "type": "string",
+      "allowed": [
+        "Performance Report"
+      ]
+    }
+  }
