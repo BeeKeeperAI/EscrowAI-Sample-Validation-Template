@@ -19,6 +19,6 @@ This example is meant to be a container that downloads chest x-ray images inside
 5. An example of a set of python requirements [requirements.txt](requirements.txt) which defines the python packages needed to run your app.py
 6. An example of a validation criteria file [schema.json](schema.json) which enforces strict output requirements for a final report
 
-## What do I do with tihs code?
+## What do I do with this code?
 
 You will simply zip this set of code up and upload it to the EscrowAI platform and you should be ready to run this example!
