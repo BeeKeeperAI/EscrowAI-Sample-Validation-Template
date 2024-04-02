@@ -1,0 +1,31 @@
+{
+    "report": {
+        "type": "dict",
+        "schema": {
+            "accuracy": {
+                "type": "dict",
+                "schema": {
+                    "value": {"type": "float", "min": 0, "max": 1},
+                    "CI": {"type": "float", "min": 0, "max": 1},
+                    "n": {"type": "integer", "min": 1}
+                }
+            },
+            "specificity": {
+                "type": "dict",
+                "schema": {
+                    "value": {"type": "float", "min": 0, "max": 1},
+                    "CI": {"type": "float", "min": 0, "max": 1},
+                    "n": {"type": "integer", "min": 1}
+                }
+            },
+            "sensitivity": {
+                "type": "dict",
+                "schema": {
+                    "value": {"type": "float", "min": 0, "max": 1},
+                    "CI": {"type": "float", "min": 0, "max": 1},
+                    "n": {"type": "integer", "min": 1}
+                }
+            }
+        }
+    }
+}
