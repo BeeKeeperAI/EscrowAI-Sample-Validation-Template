@@ -36,7 +36,8 @@ The example `algo-template.py` calls the EscrowAI Enclave API to:
 1. List available data files,
 2. Fetch data files,
 3. Post a log message,
-4. and Post a final report.
+4. Validate a report with in-line schema,
+5. and Post a final report.
 
 ### Requirements.txt
 
@@ -53,3 +54,7 @@ sample-validation-template/
 ├── algo-template.py
 └── requirements.txt
 ```
+
+## Early Access: Using the EnclaveAPI Sandbox
+
+When pointing the EnclaveSDK to the Enclave Sandbox (sandbox.dev.escrow.beekeeperai.com), you can perform the set of example API calls provided in this repository locally before deploying in EscrowAI. The code has the configuration required to point at the Enclave Sandbox and you need to uncomment those configurations to point at the sandbox. This system is under active development and is presented as-is.
