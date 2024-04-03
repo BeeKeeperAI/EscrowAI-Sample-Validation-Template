@@ -11,10 +11,14 @@ from typing import List, Dict, ByteString
 import EnclaveSDK
 from EnclaveSDK import File, Report, LogData
 
-# Create the SDK configuration and instantiate the SDK client
+# Set the code to access the Enclave API inside the enclave as follows:
 configuration = EnclaveSDK.Configuration("https://localhost:5000")
-sas_url = None # When testing locally, setting this to a real SAS URL will allow some functions to work
-configuration.verify_ssl = False
+sas_url = None 
+
+# Uncomment the following lines to use the EnclaveAPI Sandbox, make sure to comment before uploading to EscrowAI
+# configuration.host = "https://sandbox.dev.escrow.beekeeperai.com"
+# sas_url = 'SAS-URL-WITH-READ-AND-LIST-PERMISSIONS' 
+
 api_client = EnclaveSDK.ApiClient(configuration)
 
 # Use the Data API class to get a list of files in the Blob container
@@ -103,27 +107,23 @@ def generateReport(results):
         print('Accuracy: {:.2f} ± {} (95% CI, n={})'.format(accuracy, round(abs(accuracyCI),4), n), file=output)
         if 'accuracy' not in reportJSON:
             reportJSON['accuracy'] = {}
-        reportJSON['accuracy']['value'] = accuracy
-        reportJSON['accuracy']['CI'] = round(abs(accuracyCI),4)
-        reportJSON['accuracy']['n'] = n
+        reportJSON['accuracy'] = {'value': accuracy, 'CI': round(abs(accuracyCI),4), 'n': n}
+
         # Calculate and print the specificity with confidence interval
         specificity = tn/(tn+fp)
         specificityCI = 1.96*(sqrt(specificity)-(1-specificity))/n
         print('Specificity: {:.2f} ± {} (95% CI, n={})'.format(specificity, round(abs(specificityCI),4), n), file=output)
         if 'specificity' not in reportJSON:
             reportJSON['specificity'] = {}
-        reportJSON['specificity']['value'] = specificity
-        reportJSON['specificity']['CI'] = round(abs(specificityCI),4)
-        reportJSON['specificity']['n'] = n
+        reportJSON['specificity'] = {'value': specificity, 'CI': round(abs(specificityCI),4), 'n': n}
+
         # Calculate and print the sensitivity with confidence interval
         sensitivity = recall_score(y_test, y_pred, average='weighted')
         sensitivityCI = 1.96*(sqrt(sensitivity)-(1-sensitivity))/n
         print('Sensitivity: {:.2f} ± {} (95% CI, n={})'.format(sensitivity, round(abs(sensitivityCI),4), n), file=output)
         if 'sensitivity' not in reportJSON:
             reportJSON['sensitivity'] = {}
-        reportJSON['sensitivity']['value'] = sensitivity
-        reportJSON['sensitivity']['CI'] = round(abs(sensitivityCI),4)
-        reportJSON['sensitivity']['n'] = n
+        reportJSON['sensitivity'] = {'value': sensitivity, 'CI': round(abs(sensitivityCI),4), 'n': n}
     except Exception as e:
         print(f"An error occurred while calculating metrics: {str(e)}")
 
