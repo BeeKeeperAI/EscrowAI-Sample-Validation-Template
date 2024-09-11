@@ -1,4 +1,5 @@
 import io
+import os
 import json
 import pandas as pd
 from fastai.learner import load_learner
@@ -13,7 +14,7 @@ import EnclaveSDK
 from EnclaveSDK import File, Report, LogData
 
 # Set the code to access the Enclave API inside the enclave as follows:
-configuration = EnclaveSDK.Configuration("https://localhost:5000")
+configuration = EnclaveSDK.Configuration(os.getenv("ENCLAVE_URL", "http://localhost:5000"))
 sas_url = None 
 
 # Uncomment the following lines to use the EnclaveAPI Sandbox, make sure to comment before uploading to EscrowAI
