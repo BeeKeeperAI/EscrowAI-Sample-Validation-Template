@@ -8,6 +8,7 @@ from io import BytesIO
 from sklearn.metrics import accuracy_score, recall_score,confusion_matrix
 from cmath import sqrt
 from typing import List, Dict, ByteString
+import base64
 import EnclaveSDK
 from EnclaveSDK import File, Report, LogData
 
@@ -16,7 +17,7 @@ configuration = EnclaveSDK.Configuration("https://localhost:5000")
 sas_url = None 
 
 # Uncomment the following lines to use the EnclaveAPI Sandbox, make sure to comment before uploading to EscrowAI
-# configuration.host = "https://sandbox.dev.escrow.beekeeperai.com"
+# configuration.host = "https://enclaveapi.stg.escrow.beekeeperai.com"
 # sas_url = 'SAS-URL-WITH-READ-AND-LIST-PERMISSIONS' 
 
 api_client = EnclaveSDK.ApiClient(configuration)
@@ -32,7 +33,6 @@ def get_file_list(sas_url=None) -> List[File]:
 def download_file(file_name: str, sas_url=None) -> ByteString:
     api_instance = EnclaveSDK.DataApi(api_client)
     content = api_instance.api_v1_data_file_get(file_name, sas_url=sas_url)
-    api_instance.api_v1_data_files_get()
 
     return content
 

@@ -1,2 +1,2 @@
 fastai
-EnclaveSDK==1.5.4
+EnclaveSDK==1.5.8
