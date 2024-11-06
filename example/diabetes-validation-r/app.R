@@ -54,6 +54,7 @@ post_report <- function(final_report) {
     return(fromJSON(rawToChar(response$content)))
 }
 
+# Post log to the Enclave
 post_log <- function(message, status) {
     log <- list(message = message, status = status)
     response <- POST(
