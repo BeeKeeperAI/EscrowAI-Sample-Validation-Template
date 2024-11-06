@@ -18,7 +18,7 @@ configuration = EnclaveSDK.Configuration(os.getenv("ENCLAVE_URL", "https://local
 sas_url = None 
 
 # Uncomment the following lines to use the EnclaveAPI Sandbox, make sure to comment before uploading to EscrowAI
-# configuration.host = "https://enclaveapi.stg.escrow.beekeeperai.com"
+# configuration.host = "https://enclaveapi.escrow.beekeeperai.com"
 # sas_url = 'SAS-URL-WITH-READ-AND-LIST-PERMISSIONS' 
 
 api_client = EnclaveSDK.ApiClient(configuration)

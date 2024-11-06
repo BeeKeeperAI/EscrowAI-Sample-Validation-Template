@@ -2,22 +2,25 @@
 options(repos = c(CRAN = "https://cloud.r-project.org"))
 
 # Install required packages if not already installed
-required_packages <- c("httr", "jsonlite", "dplyr")
+required_packages <- c("httr", "jsonlite", "dplyr", "openssl")
 new_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
 if(length(new_packages)) install.packages(new_packages)
 
 library(httr)
 library(jsonlite)
 library(dplyr)
+library(openssl)
 source("corr.R")
 
+# Disable SSL verification
 httr::set_config(config(ssl_verifypeer = FALSE, ssl_verifyhost = FALSE))
 
 
 # Create the SDK configuration
-enclave_url <- Sys.getenv("ENCLAVE_URL", unset = "https://enclaveapi.stg.escrow.beekeeperai.com")
-SAS_URL <- Sys.getenv("SAS_URL")
-print(paste("SAS_URL:", SAS_URL))
+enclave_url <- Sys.getenv("ENCLAVE_URL", unset = "https://enclaveapi.escrow.beekeeperai.com")
+
+# When testing in sandbox, add a SAS URL with at minimum read and list permissions
+SAS_URL <- base64_encode("<<YOUR SAS URL HERE>>")
 
 # Get list of files from the Blob container
 get_file_list <- function(sas_url=SAS_URL) {
@@ -31,17 +34,7 @@ get_file_list <- function(sas_url=SAS_URL) {
 }
 
 # Download (and decrypt a file if in EscrowAI environment)
-download_file_enclave <- function(file_name) {
-    body <- list(filepath = file_name)
-    response <- POST(
-        paste0(enclave_url, "/api/v1/data/file"),
-        body = body,
-        encode = "json"
-    )
-    return(response$content)
-}
-
-download_file_sandbox <- function(file_name, sas_url) {   
+download_file <- function(file_name, sas_url=SAS_URL) {   
     query <- list(filepath = file_name, SASUrl = sas_url)
     response <- httr::GET(
         paste0(enclave_url, "/api/v1/data/file"),
@@ -51,13 +44,6 @@ download_file_sandbox <- function(file_name, sas_url) {
     return(response$content)
 }
 
-download_file <- function(file_name) {
-    if (SAS_URL!="") {
-        return(download_file_sandbox(file_name, SAS_URL))
-    } else {
-        return(download_file_enclave(file_name))
-    }
-}
 # Post report to the Enclave
 post_report <- function(final_report) {
     response <- POST(
@@ -85,6 +71,7 @@ main <- function() {
 
     # Find and download the diabetes file
     target_file <- files[grepl("^diabetes.csv", files$name), ]
+    print(paste("target_file:", target_file))
 
     if (nrow(target_file) > 0) {
         file_content <- download_file(target_file$name)
@@ -129,5 +116,6 @@ main <- function() {
 tryCatch({
     main()
 }, error = function(e) {
+    print(paste("Error:", e$message))
     post_log(paste("Error:", e$message), "Failed")
 })
