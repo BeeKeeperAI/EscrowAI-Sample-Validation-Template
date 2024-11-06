@@ -1,42 +1,25 @@
-# Build stage
-FROM r-base:latest AS builder
-
-# Install system dependencies for building packages
-RUN apt-get update -y && \
-    apt-get install -y \
-    libcurl4-openssl-dev \
-    libssl-dev \
-    libxml2-dev
-
-# Create directory for installed R packages
-RUN mkdir -p /r-packages
-ENV R_LIBS_USER=/r-packages
-
-# Install R packages
-RUN Rscript -e 'install.packages(c("httr", "jsonlite", "dplyr"), repos="https://cloud.r-project.org", lib="/r-packages")'
-
-# Runtime stage
 FROM r-base:latest
 
-# Install only runtime system dependencies
+# Install system dependencies and R packages in a single layer
 RUN apt-get update -y && \
     apt-get install -y \
     libcurl4-openssl-dev \
     libssl-dev \
+    libxml2-dev \
     --no-install-recommends && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    mkdir -p /r-packages && \
+    Rscript -e 'install.packages(c("httr", "jsonlite", "dplyr"), repos="https://cloud.r-project.org", lib="/r-packages")'
 
-# Create directory and copy installed packages
-RUN mkdir -p /r-packages
-COPY --from=builder /r-packages /r-packages
+# Set R library path
 ENV R_LIBS_USER=/r-packages
 
+# Set up application
 WORKDIR /app
-
 COPY . .
 
-# Make the run.sh script executable
+# Make the run script executable
 RUN chmod +x run.sh
 
-# set the start command
+# Set the start command
 ENTRYPOINT [ "./run.sh" ]
