@@ -13,21 +13,21 @@ import base64
 import EnclaveSDK
 from EnclaveSDK import File, Report, LogData
 
-# Set the code to access the Enclave API inside the enclave as follows:
-configuration = EnclaveSDK.Configuration(os.getenv("ENCLAVE_URL", "https://localhost:5000"))
-sas_url = None 
+# Use the ENCLAVE_URL environment variable to create an SDK configuration for the Sandbox
+configuration = EnclaveSDK.Configuration(os.getenv("ENCLAVE_URL", "https://enclaveapi.escrow.beekeeperai.com/"))
+# Use the SAS_URL environment variables to use the Data API in the Sandbox, otherwise default to None
+sas_url = os.getenv("SAS_URL", None) 
+if sas_url:
+    sas_url = base64.b64encode(sas_url.encode()).decode()
 
-# Uncomment the following lines to use the EnclaveAPI Sandbox, make sure to comment before uploading to EscrowAI
-# configuration.host = "https://enclaveapi.escrow.beekeeperai.com"
-# sas_url = 'SAS-URL-WITH-READ-AND-LIST-PERMISSIONS' 
-
+# Finalize the creation of your API client
 api_client = EnclaveSDK.ApiClient(configuration)
 
 # Use the Data API class to get a list of files in the Blob container
 def get_file_list(sas_url=None) -> List[File]:
     api_instance = EnclaveSDK.DataApi(api_client)
     api_response = api_instance.api_v1_data_files_get(sas_url=sas_url)
-    
+
     return api_response.files
 
 # Use the Data API class to securely decrypt and download a file give the `.name` attribute of the files list
@@ -43,23 +43,27 @@ def post_log(log: Dict) -> Dict:
     api_instance = EnclaveSDK.LogApi(api_client)
 
     # Use the Log model to create a log object for posting
-    # the posted log will be validated against the DS-provided
-    # validation schema
     log = LogData.from_dict(log)
     api_response = api_instance.api_v1_log_post(log)
+
     return api_response
 
-# Use the Report API class to post a report
+# Use the Report API to post a report
 def post_report(finalReport: Dict) -> Dict:
     # Create an instance of Report API class
     api_instance = EnclaveSDK.ReportApi(api_client)
+
+    # Check if schema.json is available and read it into json_schema
+    if os.path.exists("schema.json"):
+        with open("schema.json", "r") as schema:
+            finalReport['json_schema'] = EnclaveSDK.ReportJsonSchema.from_dict(json.load(schema))
 
     # Use the Report model to create a report object for posting
     # the posted report will be validated against the DS-provided
     # validation schema
     report = Report.from_dict(finalReport)
     api_response = api_instance.api_v1_report_post(report)
-    return api_response.to_json()
+    return api_response
 
 # Get the folder the file is in for a label (for inference)
 def label_func(x): return x.parent.name 
@@ -75,7 +79,6 @@ def getPred(model, file_content):
     pred_class,pred_idx,outputs = model.predict(PILImage(uploadedImage))
 
     return pred_class
-
 
 def generateReport(results):
     reportJSON = {}
@@ -178,5 +181,5 @@ def main():
     post_report(finalReport)
 
 if __name__ == "__main__":
-    post_log({"message": "Starting the COVID-19 X-Ray Classification Report", "status": "In Progress"})
+    post_log({"message": "Starting the COVID-19 X-Ray Classification Report"})
     main()
