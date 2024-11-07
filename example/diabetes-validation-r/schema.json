@@ -1,5 +1,5 @@
 {
-    "report": {
-      "type": "string"
-    }
+  "report": {
+    "type": "string"
   }
+}
