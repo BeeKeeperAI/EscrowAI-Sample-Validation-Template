@@ -41,7 +41,7 @@ download_file <- function(file_name, sas_url = SAS_URL) {
     return(response$content)
 }
 
-# Post report to the Enclave
+# Post report to the Enclave. If schema.json exists, it will be used to validate the report.
 post_report <- function(final_report) {
     # Check if schema.json exists and load it
     schema_file <- "schema.json"
@@ -127,11 +127,11 @@ main <- function() {
 
         # Submit the report to the Enclave API and store the response
         # The response will contain confirmation of successful submission
-        result <- post_report(final_report)
+        response_content <- post_report(final_report)
         
         # Print the API response for verification
         # This typically includes a success message or any error details
-        print(result)
+        print(response_content)
     } else {
         post_log("Failed to download file", "Failed")
     }
