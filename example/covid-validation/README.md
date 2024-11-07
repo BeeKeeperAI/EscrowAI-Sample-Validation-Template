@@ -21,4 +21,4 @@ This example is meant to be a container that downloads chest x-ray images inside
 
 ## What do I do with this code?
 
-You will simply zip this set of code up and upload it to the EscrowAI platform and you should be ready to run this example!
+You will simply upload this code to the EscrowAI platform and you should be ready to run this example!
