@@ -121,9 +121,16 @@ main <- function() {
             status = "Completed"
         )
 
-        # print(final_report)
+        # Print the final report structure before sending it
+        # This helps with debugging and verification of the report format
+        print(final_report)
 
+        # Submit the report to the Enclave API and store the response
+        # The response will contain confirmation of successful submission
         result <- post_report(final_report)
+        
+        # Print the API response for verification
+        # This typically includes a success message or any error details
         print(result)
     } else {
         post_log("Failed to download file", "Failed")
