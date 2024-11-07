@@ -6,9 +6,5 @@ corrFunction <- function(df) {
     # Calculate correlation matrix
     corr <- cor(x, method = "pearson")
 
-    # Print correlation matrix
-    print("Pearson's correlation: ")
-    print(corr)
-
     return(corr)
 }
