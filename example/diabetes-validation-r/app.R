@@ -12,9 +12,6 @@ library(dplyr)
 library(openssl)
 source("corr.R")
 
-# Disable SSL verification
-httr::set_config(config(ssl_verifypeer = FALSE, ssl_verifyhost = FALSE))
-
 
 # Create the SDK configuration
 enclave_url <- Sys.getenv("ENCLAVE_URL", unset = "https://enclaveapi.escrow.beekeeperai.com")
