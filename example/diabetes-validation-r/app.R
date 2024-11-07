@@ -138,6 +138,7 @@ main <- function() {
         print(final_report)
 
         # Submit the report to the Enclave API and store the response
+        # If schema.json exists, it will be used to validate the report.
         # The response will contain confirmation of successful submission
         response_content <- post_report(final_report)
         
