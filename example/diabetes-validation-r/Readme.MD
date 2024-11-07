@@ -31,7 +31,7 @@ The application can be run in three ways: without a container, inside a local Do
 
 ## Running locally without a container
 
-Before working with the encrypted version, you can test the R application locally. To do so, you will need to edit the `run_sandbox.sh` script to include your SAS URL. Then, you can run the script:
+Before working with the encrypted version, you can test the R application locally. To do so, you will need to edit the `run.sh` script to include your SAS URL. Then, you can run the script:
 
 ```bash
 bash run.sh
