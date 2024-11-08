@@ -10,11 +10,11 @@ library(httr)
 library(jsonlite)
 library(dplyr)
 library(openssl)
-source("corr.R")
 
 
 # Create the SDK configuration
-enclave_url <- Sys.getenv("ENCLAVE_URL", unset = "https://enclaveapi.escrow.beekeeperai.com")
+enclave_url <- Sys.getenv("ESCROW_RUNTIME_LOCATION", unset = "https://enclaveapi.escrow.beekeeperai.com")
+enclave_url <- sub("/api/v1$", "", enclave_url)
 
 # When testing in sandbox, add a SAS URL with at minimum read and list permissions
 SAS_URL <- base64_encode(Sys.getenv("SAS_URL"))
@@ -89,6 +89,19 @@ post_log <- function(message, status = "In Progress") {
     # Optional: Return the response if needed, otherwise function is complete
     return(response)
 }
+
+
+# calculate Pearson's correlation
+corrFunction <- function(df) {
+    # Select all columns except 'Outcome'
+    x <- df[, !names(df) %in% c("Outcome")]
+
+    # Calculate correlation matrix
+    corr <- cor(x, method = "pearson")
+
+    return(corr)
+}
+
 
 main <- function() {
     post_log("Listing files in Blob container")
