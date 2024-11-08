@@ -104,7 +104,7 @@ corrFunction <- function(df) {
 
 
 main <- function() {
-    print(post_log("Listing files in Blob container"))
+    post_log("Listing files in Blob container")
     files <- get_file_list()
     print(paste("files:", files))
     file_content <- NULL
