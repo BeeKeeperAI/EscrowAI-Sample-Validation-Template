@@ -16,7 +16,6 @@ httr::set_config(httr::config(ssl_verifypeer = FALSE, ssl_verifyhost = FALSE))
 
 # Create the SDK configuration
 enclave_url <- Sys.getenv("ESCROW_RUNTIME_LOCATION", unset = "https://enclaveapi.escrow.beekeeperai.com")
-enclave_url <- sub("/api/v1$", "", enclave_url)
 
 # When testing in sandbox, add a SAS URL with at minimum read and list permissions
 SAS_URL <- base64_encode(Sys.getenv("SAS_URL"))
