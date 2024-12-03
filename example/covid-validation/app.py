@@ -15,9 +15,7 @@ import EnclaveSDK
 from EnclaveSDK import File, Report, LogData
 
 # Use the ESCROW_RUNTIME_LOCATION environment variable to create an SDK configuration for the Sandbox
-ESCROW_RUNTIME_LOCATION = os.getenv("ESCROW_RUNTIME_LOCATION", "https://enclaveapi.escrow.beekeeperai.com/")
-parsed_enclave_url = urlparse(ESCROW_RUNTIME_LOCATION)
-enclave_url = f"{parsed_enclave_url.scheme}://{parsed_enclave_url.netloc}"
+enclave_url = os.getenv("ESCROW_RUNTIME_LOCATION", "https://enclaveapi.escrow.beekeeperai.com")
 
 configuration = EnclaveSDK.Configuration(enclave_url)
 # Use the SAS_URL environment variables to use the Data API in the Sandbox, otherwise default to None
