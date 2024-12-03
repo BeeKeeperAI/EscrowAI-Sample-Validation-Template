@@ -14,7 +14,6 @@ import base64
 import EnclaveSDK
 from EnclaveSDK import File, Report, LogData
 
-# Use the ENCLAVE_URL environment variable to create an SDK configuration for the Sandbox
 enclave_url = os.getenv("ENCLAVE_URL", "https://enclaveapi.escrow.beekeeperai.com")
 
 configuration = EnclaveSDK.Configuration(enclave_url)
