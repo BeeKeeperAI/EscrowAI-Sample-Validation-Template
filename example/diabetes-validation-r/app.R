@@ -11,9 +11,6 @@ library(jsonlite)
 library(dplyr)
 library(openssl)
 
-# Disable ssl certificate verification and hostname verification globally
-httr::set_config(httr::config(ssl_verifypeer = FALSE, ssl_verifyhost = FALSE))
-
 # Create the SDK configuration
 enclave_url <- Sys.getenv("ESCROW_RUNTIME_LOCATION", unset = "https://enclaveapi.escrow.beekeeperai.com")
 enclave_url <- sub("/api/v1$", "", enclave_url)
