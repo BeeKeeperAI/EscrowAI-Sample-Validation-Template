@@ -57,7 +57,7 @@ sample-validation-template/
 
 ## Early Access: Using the EnclaveAPI Sandbox
 
-When pointing the EnclaveSDK to the Enclave Sandbox (sandbox.dev.escrow.beekeeperai.com), you can perform the set of example API calls provided in this repository locally before deploying in EscrowAI. The code has the configuration required to point at the Enclave Sandbox and you need to uncomment those configurations to point at the sandbox. This system is under active development and is presented as-is.
+When pointing the EnclaveSDK to the Enclave Sandbox (enclaveapi.escrow.beekeeperai.com), you can perform the set of example API calls provided in this repository locally before deploying in EscrowAI. The code has the configuration required to point at the Enclave Sandbox and you need to uncomment those configurations to point at the sandbox. This system is under active development and is presented as-is.
 
 ## Preparing to Encrypt Your Secrets
 

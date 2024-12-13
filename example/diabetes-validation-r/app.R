@@ -12,8 +12,7 @@ library(dplyr)
 library(openssl)
 
 # Create the SDK configuration
-enclave_url <- Sys.getenv("ESCROW_RUNTIME_LOCATION", unset = "https://enclaveapi.escrow.beekeeperai.com")
-enclave_url <- sub("/api/v1$", "", enclave_url)
+enclave_url <- Sys.getenv("ENCLAVE_URL", unset = "https://enclaveapi.escrow.beekeeperai.com")
 
 # When testing in sandbox, add a SAS URL with at minimum read and list permissions
 SAS_URL <- base64_encode(Sys.getenv("SAS_URL"))
