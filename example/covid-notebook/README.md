@@ -48,6 +48,22 @@ This method converts the notebook to a Python script and executes it:
 SAS_URL='your_sas_url_here' ./run.sh
 ```
 
+#### Continuous Running Mode
+The code supports continuous monitoring of the data source. You can set the `RUNTIME_DAYS` environment variable to specify how long the script should run:
+
+```bash
+# Run for 7 days
+RUNTIME_DAYS=7 SAS_URL='your_sas_url_here' ./run.sh
+
+# Run for 1 day
+RUNTIME_DAYS=1 SAS_URL='your_sas_url_here' jupyter notebook
+```
+
+If `RUNTIME_DAYS` is not set or is set to 0, the script will run once and exit. When running in continuous mode, the script will:
+- Check for new images every minute
+- Generate updated reports when new data is found
+- Automatically exit after the specified number of days
+
 Note: Replace `your_sas_url_here` with your actual SAS URL from EscrowAI.
 
 ## Deploying to EscrowAI
