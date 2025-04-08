@@ -39,7 +39,7 @@ This is recommended for development and interactive exploration:
 # Set the SAS_URL environment variable and start Jupyter
 SAS_URL='your_sas_url_here' jupyter notebook
 ```
-Then open `app.ipynb` in your browser and run the cells interactively.
+Then open `app.ipynb` in your browser and run the cells interactively and ensure you see no errors. See [Jupyter's documentation](https://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Running%20Code.html) for more details on running notebook cells.
 
 #### Option 2: Using run.sh
 This method converts the notebook to a Python script and executes it:
