@@ -1,5 +1,111 @@
 {
   "report": {
-    "type": "string"
+      "type": "dict",
+      "schema": {
+          "Pregnancies": {
+              "type": "dict",
+              "schema": {
+                  "Pregnancies": {"type": "float", "max": 1, "min": -1},
+                  "Glucose": {"type": "float", "max": 1, "min": -1},
+                  "BloodPressure": {"type": "float", "max": 1, "min": -1},
+                  "SkinThickness": {"type": "float", "max": 1, "min": -1},
+                  "Insulin": {"type": "float", "max": 1, "min": -1},
+                  "BMI": {"type": "float", "max": 1, "min": -1},
+                  "DiabetesPedigreeFunction": {"type": "float", "max": 1, "min": -1},
+                  "Age": {"type": "float", "max": 1, "min": -1}
+              }
+          },
+          "Glucose": {
+              "type": "dict",
+              "schema": {
+                  "Pregnancies": {"type": "float", "max": 1, "min": -1},
+                  "Glucose": {"type": "float", "max": 1, "min": -1},
+                  "BloodPressure": {"type": "float", "max": 1, "min": -1},
+                  "SkinThickness": {"type": "float", "max": 1, "min": -1},
+                  "Insulin": {"type": "float", "max": 1, "min": -1},
+                  "BMI": {"type": "float", "max": 1, "min": -1},
+                  "DiabetesPedigreeFunction": {"type": "float", "max": 1, "min": -1},
+                  "Age": {"type": "float", "max": 1, "min": -1}
+              }
+          },
+          "BloodPressure": {
+              "type": "dict",
+              "schema": {
+                  "Pregnancies": {"type": "float", "max": 1, "min": -1},
+                  "Glucose": {"type": "float", "max": 1, "min": -1},
+                  "BloodPressure": {"type": "float", "max": 1, "min": -1},
+                  "SkinThickness": {"type": "float", "max": 1, "min": -1},
+                  "Insulin": {"type": "float", "max": 1, "min": -1},
+                  "BMI": {"type": "float", "max": 1, "min": -1},
+                  "DiabetesPedigreeFunction": {"type": "float", "max": 1, "min": -1},
+                  "Age": {"type": "float", "max": 1, "min": -1}
+              }
+          },
+          "SkinThickness": {
+              "type": "dict",
+              "schema": {
+                  "Pregnancies": {"type": "float", "max": 1, "min": -1},
+                  "Glucose": {"type": "float", "max": 1, "min": -1},
+                  "BloodPressure": {"type": "float", "max": 1, "min": -1},
+                  "SkinThickness": {"type": "float", "max": 1, "min": -1},
+                  "Insulin": {"type": "float", "max": 1, "min": -1},
+                  "BMI": {"type": "float", "max": 1, "min": -1},
+                  "DiabetesPedigreeFunction": {"type": "float", "max": 1, "min": -1},
+                  "Age": {"type": "float", "max": 1, "min": -1}
+              }
+          },
+          "Insulin": {
+              "type": "dict",
+              "schema": {
+                  "Pregnancies": {"type": "float", "max": 1, "min": -1},
+                  "Glucose": {"type": "float", "max": 1, "min": -1},
+                  "BloodPressure": {"type": "float", "max": 1, "min": -1},
+                  "SkinThickness": {"type": "float", "max": 1, "min": -1},
+                  "Insulin": {"type": "float", "max": 1, "min": -1},
+                  "BMI": {"type": "float", "max": 1, "min": -1},
+                  "DiabetesPedigreeFunction": {"type": "float", "max": 1, "min": -1},
+                  "Age": {"type": "float", "max": 1, "min": -1}
+              }
+          },
+          "BMI": {
+              "type": "dict",
+              "schema": {
+                  "Pregnancies": {"type": "float", "max": 1, "min": -1},
+                  "Glucose": {"type": "float", "max": 1, "min": -1},
+                  "BloodPressure": {"type": "float", "max": 1, "min": -1},
+                  "SkinThickness": {"type": "float", "max": 1, "min": -1},
+                  "Insulin": {"type": "float", "max": 1, "min": -1},
+                  "BMI": {"type": "float", "max": 1, "min": -1},
+                  "DiabetesPedigreeFunction": {"type": "float", "max": 1, "min": -1},
+                  "Age": {"type": "float", "max": 1, "min": -1}
+              }
+          },
+          "DiabetesPedigreeFunction": {
+              "type": "dict",
+              "schema": {
+                  "Pregnancies": {"type": "float", "max": 1, "min": -1},
+                  "Glucose": {"type": "float", "max": 1, "min": -1},
+                  "BloodPressure": {"type": "float", "max": 1, "min": -1},
+                  "SkinThickness": {"type": "float", "max": 1, "min": -1},
+                  "Insulin": {"type": "float", "max": 1, "min": -1},
+                  "BMI": {"type": "float", "max": 1, "min": -1},
+                  "DiabetesPedigreeFunction": {"type": "float", "max": 1, "min": -1},
+                  "Age": {"type": "float", "max": 1, "min": -1}
+              }
+          },
+          "Age": {
+              "type": "dict",
+              "schema": {
+                  "Pregnancies": {"type": "float", "max": 1, "min": -1},
+                  "Glucose": {"type": "float", "max": 1, "min": -1},
+                  "BloodPressure": {"type": "float", "max": 1, "min": -1},
+                  "SkinThickness": {"type": "float", "max": 1, "min": -1},
+                  "Insulin": {"type": "float", "max": 1, "min": -1},
+                  "BMI": {"type": "float", "max": 1, "min": -1},
+                  "DiabetesPedigreeFunction": {"type": "float", "max": 1, "min": -1},
+                  "Age": {"type": "float", "max": 1, "min": -1}
+              }
+          }
+      }
   }
 }
