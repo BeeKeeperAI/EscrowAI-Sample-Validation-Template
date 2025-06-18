@@ -1,24 +1,91 @@
-# An Example of COVID Inference in EscrowAI
+# COVID-19 Chest X-Ray Analysis - EscrowAI Example
 
-In this example, you will be able to play with a simple use case of BeeKeeperAI's EscrowAI platform. Going through this example, you will be able to see how a container can be created, how a python script can be executed, and how an example with encrypted contents can be delivered to an enclave.
+This example demonstrates how to perform COVID-19 diagnosis using deep learning models on chest X-ray images within EscrowAI's secure enclave environment. The application downloads chest X-ray images, applies a pre-trained COVID-19 detection model, and generates diagnostic reports while maintaining data privacy.
 
-## What prerequisites do I need to be successful?
+## Prerequisites
 
-### Docker Knowledge
+### Knowledge Requirements
+- Understanding of Docker container build system ([Docker getting-started tutorial](https://docs.docker.com/get-started/) recommended)
+- Basic Python programming knowledge
+- Familiarity with machine learning and image classification concepts
 
-This template assumes an understanding of the Docker container build system. If you're new to Docker or need a refresher, the Docker documentation is quite strong and the first half of the [getting-started tutorial](https://docs.docker.com/get-started/) on Docker.com can be very helpful.
+### Technical Requirements
+- Python 3.8 or higher
+- Docker Version 20+
+- Bash shell
 
-## What is this example?
+### Data Requirements
+- Chest X-ray images (automatically downloaded within the enclave)
+- Pre-trained COVID-19 detection model (included in the package)
 
-This example is meant to be a container that downloads chest x-ray images inside a Trusted Execution Environment and tests a deep learning diagnosis model of Covid-19. In this repository, you will find the following files which you can adapt to your application:
+## What This Example Does
 
-1. An example [Dockerfile](Dockerfile) (this is how your container is built and specifies the environment your code will use in an enclave)
-2. An example [app.py](app.py) (tihs code uses the EnclaveSDK to access secrets in an enclave, processes example chest x-rays, and creates a report for EscrowAI with the results of this covid model validation run)
-3. An example secret ([multi-class-pg.pkl](models/multi-class-pg.pkl)) model
-4. An example of a container entrypoint [run.sh](run.sh) which is pointed to by the Dockerfile and which starts your code in a Trusted Execution Environment
-5. An example of a set of python requirements [requirements.txt](requirements.txt) which defines the python packages needed to run your app.py
-6. An example of a validation criteria file [schema.json](schema.json) which enforces strict output requirements for a final report
+This example creates a container that operates within a Trusted Execution Environment to:
 
-## What do I do with this code?
+1. Download chest X-ray images securely using the EnclaveSDK
+2. Load a pre-trained deep learning model for COVID-19 detection
+3. Process the X-ray images through the diagnostic model
+4. Generate classification results (COVID-19 positive/negative)
+5. Create a comprehensive validation report with model performance metrics
+6. Post results securely through the EnclaveAPI
 
-You will simply upload this code to the EscrowAI platform where your code can be encrypted and you should be ready to run this example!
+## Files in This Example
+
+1. **`Dockerfile`** - Container environment configuration specifying the runtime environment for the enclave
+2. **`run.sh`** - Entry point script that starts the application in the Trusted Execution Environment
+3. **`app.py`** - Main Python script that uses EnclaveSDK to access secrets, process X-ray images, and generate reports
+4. **`models/multi-class-pg.pkl`** - Pre-trained COVID-19 detection model (encrypted secret)
+5. **`requirements.txt`** - Python package dependencies needed to run the application
+6. **`schema.json`** - Validation criteria file that enforces strict output requirements for the final report
+
+## How to Run This Example
+
+### Option 1: Local Development
+For testing the application locally before enclave deployment:
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the Python application directly
+python app.py
+```
+
+Note: Local execution will use mock data and may have limited functionality compared to enclave execution.
+
+### Option 2: Docker Container
+Build and test the containerized version:
+
+```bash
+# Build the Docker image
+docker build -t covid-validation .
+
+# Run the container
+docker run --rm covid-validation
+```
+
+### Option 3: EscrowAI Enclave
+For production deployment in the secure enclave:
+
+1. **Prepare files for encryption**: Encrypt sensitive files like the model file (`models/multi-class-pg.pkl`) and `app.py` if desired. Do NOT encrypt `Dockerfile` and `run.sh`
+2. **Package the algorithm**: Create a zip file containing all components
+3. **Upload to EscrowAI**: Use the EscrowAI platform to upload your encrypted package
+4. **Execute**: Run the COVID-19 validation within the trusted execution environment
+
+## Expected Results
+
+Upon successful execution, you should see:
+- Image download and preprocessing progress
+- Model loading confirmation
+- Classification results for each processed X-ray image
+- Performance metrics and validation statistics
+- Schema validation success confirmation
+- Final diagnostic report submission status
+
+## Troubleshooting
+
+- **Model loading errors**: Ensure the `multi-class-pg.pkl` file is properly encrypted and accessible
+- **Image processing failures**: Verify that the input images are in the correct format and accessible
+- **Docker build issues**: Check that all dependencies in `requirements.txt` are compatible
+- **Schema validation errors**: Review the output format against the `schema.json` requirements
+- **EnclaveSDK connection issues**: Verify that the enclave environment is properly configured

@@ -1,47 +1,84 @@
-# An Example of Diabetes Analysis in EscrowAI
+# Diabetes Analysis in R - EscrowAI Example
 
-In this example, you will learn how to analyze diabetes data using BeeKeeperAI's EscrowAI platform. This demo shows how to perform correlation analysis on diabetes datasets within a secure enclave environment.
+This example demonstrates how to perform correlation analysis on diabetes datasets within EscrowAI's secure enclave environment using R. The application analyzes diabetes data and generates correlation reports while maintaining data privacy and security.
 
-## What prerequisites do I need to be successful?
+## Prerequisites
 
-### Docker Knowledge
+### Knowledge Requirements
+- Understanding of Docker container build system ([Docker getting-started tutorial](https://docs.docker.com/get-started/) recommended)
+- Basic R programming knowledge
+- Familiarity with statistical correlation analysis
 
-This template assumes an understanding of the Docker container build system. If you're new to Docker or need a refresher, the Docker documentation is quite strong and the first half of the [getting-started tutorial](https://docs.docker.com/get-started/) on Docker.com can be very helpful.
-
-### Technical Prerequisites
-
-You will need the following items installed on your development machine to execute these steps:
-
-- R
+### Technical Requirements
+- R (version 3.6 or higher)
 - Docker Version 20+
-- Bash
+- Bash shell
 
-## What is this example?
+### Data Requirements
+- Diabetes dataset (example available at: https://www.kaggle.com/datasets/saurabh00007/diabetescsv)
+- Dataset should be accessible via SAS URL for enclave execution
 
-This example demonstrates how to use BeeKeeperAI's EnclaveAPI to securely analyze diabetes data. The application performs correlation analysis on the dataset within an enclave environment. In this repository, you will find:
+## What This Example Does
 
-1. An example [Dockerfile](Dockerfile) 
-2. An example [app.R](app.R) (this performs the main correlation analysis)
-3. An example [corr.R](corr.R) (this contains the correlation function implementation)
-4. An example of a validation criteria file [schema.json](schema.json) which enforces strict output requirements for a final report
+This example uses BeeKeeperAI's EnclaveAPI to securely analyze diabetes data within a trusted execution environment. The application:
 
-## How do I run this sample?
+1. Fetches diabetes dataset from secure storage
+2. Performs correlation analysis using R statistical functions
+3. Generates comprehensive correlation reports
+4. Validates output against predefined schema requirements
+5. Posts results securely through the EnclaveAPI
 
-The application can be run in three ways: without a container, inside a local Docker container, and within an EscrowAI enclave. For testing, you can use the public diabetes dataset available here: https://www.kaggle.com/datasets/saurabh00007/diabetescsv
+## Files in This Example
 
-## Running locally without a container
+1. **`Dockerfile`** - Container environment configuration for R and dependencies
+2. **`run.sh`** - Entry point script that launches the R application
+3. **`app.R`** - Main R script that performs correlation analysis using EnclaveAPI
+4. **`corr.R`** - Correlation function implementation and statistical utilities
+5. **`requirements.txt`** - R package dependencies (if applicable)
+6. **`schema.json`** - Validation criteria for output reports ensuring data quality
 
-Before working with the encrypted version, you can test the R application locally. To do so, you will need to edit the `run.sh` script to include your SAS URL. Then, you can run the script:
+## How to Run This Example
+
+### Option 1: Local Development
+For testing the R application locally before enclave deployment:
+
+1. Edit the `run.sh` script to include your SAS URL for data access
+2. Run the application:
+   ```bash
+   bash run.sh
+   ```
+
+### Option 2: Docker Container
+Build and run the containerized version:
 
 ```bash
-bash run.sh
+# Build the Docker image
+docker build -t diabetes-analysis-r .
+
+# Run the container
+docker run --rm diabetes-analysis-r
 ```
 
-## Running in the EscrowAI Enclave
+### Option 3: EscrowAI Enclave
+For production deployment in the secure enclave:
 
-To run this example inside the EscrowAI enclave, you will need to encrypt files on interest. You should take note not to encrypt the following files:
+1. **Prepare files for encryption**: Encrypt sensitive files (do NOT encrypt `Dockerfile` and `run.sh`)
+2. **Package the algorithm**: Create a zip file with all components
+3. **Upload to EscrowAI**: Use the EscrowAI platform to upload your encrypted package
+4. **Execute**: Run the analysis within the trusted execution environment
 
-- Dockerfile
-- run.sh
+## Expected Results
 
-After encrypting the files, you will need to zip the files up and upload them to the EscrowAI platform. Then, you will be ready to run this example inside the enclave.
+Upon successful execution, you should see:
+- Data loading confirmation messages
+- Correlation analysis progress indicators
+- Statistical correlation results
+- Schema validation success confirmation
+- Final report submission status
+
+## Troubleshooting
+
+- **Data access issues**: Verify your SAS URL is correctly configured and has appropriate permissions
+- **R package errors**: Ensure all required R packages are installed and compatible
+- **Docker build failures**: Check that Docker daemon is running and you have sufficient permissions
+- **Schema validation errors**: Review the output format against the `schema.json` requirements
