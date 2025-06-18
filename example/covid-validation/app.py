@@ -14,9 +14,8 @@ import base64
 import EnclaveSDK
 from EnclaveSDK import File, Report, LogData
 
-enclave_url = os.getenv("ENCLAVE_URL", "https://enclaveapi.escrow.beekeeperai.com")
-
-configuration = EnclaveSDK.Configuration(enclave_url)
+# Use the ENCLAVE_URL environment variable to create an SDK configuration for the Sandbox
+configuration = EnclaveSDK.Configuration(os.getenv("ENCLAVE_URL", "https://enclaveapi.escrow.beekeeperai.com/"))
 # Use the SAS_URL environment variables to use the Data API in the Sandbox, otherwise default to None
 sas_url = os.getenv("SAS_URL", None) 
 if sas_url:
@@ -58,7 +57,7 @@ def post_report(finalReport: Dict) -> Dict:
     # Check if schema.json is available and read it into json_schema
     if os.path.exists("schema.json"):
         with open("schema.json", "r") as schema:
-            finalReport['json_schema'] = json.load(schema)
+            finalReport['json_schema'] = EnclaveSDK.ReportJsonSchema.from_dict(json.load(schema))
 
     # Use the Report model to create a report object for posting
     # the posted report will be validated against the DS-provided
