@@ -1,0 +1,4 @@
+jupyter 
+nbconvert
+fastai
+EnclaveSDK==1.5.9
