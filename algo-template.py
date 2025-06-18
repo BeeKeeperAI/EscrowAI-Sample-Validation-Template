@@ -1,12 +1,14 @@
 import EnclaveSDK
+import os
+import base64
 
-# Set the code to access the Enclave API inside the enclave as follows:
-configuration = EnclaveSDK.Configuration("https://localhost:5000")
-sas_url = None 
+enclave_url = os.getenv("ENCLAVE_URL", "https://enclaveapi.escrow.beekeeperai.com")
+configuration = EnclaveSDK.Configuration(enclave_url)
 
-# Uncomment the following lines to use the EnclaveAPI Sandbox, make sure to comment before uploading to EscrowAI
-# configuration.host = "https://sandbox.dev.escrow.beekeeperai.com"
-# sas_url = 'SAS-URL-WITH-READ-AND-LIST-PERMISSIONS' 
+# Use the SAS_URL environment variables to use the Data API in the Sandbox, otherwise default to None
+sas_url = os.getenv("SAS_URL", None)
+if sas_url:
+    sas_url = base64.b64encode(sas_url.encode()).decode()
 
 api_client = EnclaveSDK.ApiClient(configuration)
 
