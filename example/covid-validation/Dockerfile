@@ -5,6 +5,7 @@ WORKDIR /app
 COPY requirements.txt .
 COPY app.py .
 COPY run.sh .
+COPY *.bkenc .
 COPY models/ models/
 
 RUN pip install -r requirements.txt
