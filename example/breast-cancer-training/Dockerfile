@@ -6,7 +6,7 @@ RUN apt update && \
 WORKDIR /app
 
 COPY requirements.txt .
-COPY training.py .
+COPY *.py .
 COPY run.sh .
 COPY *.bkenc .
 
