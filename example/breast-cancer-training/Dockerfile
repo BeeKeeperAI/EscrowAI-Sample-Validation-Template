@@ -5,7 +5,9 @@ RUN apt update && \
 
 WORKDIR /app
 
-COPY . .
+COPY requirements.txt .
+COPY training.py .
+COPY run.sh .
 
 # Obtain the resnet model for the container because egress is not allowed in the enclave
 RUN curl https://download.pytorch.org/models/resnet101-5d3b4d8f.pth --output resnet101.pth 

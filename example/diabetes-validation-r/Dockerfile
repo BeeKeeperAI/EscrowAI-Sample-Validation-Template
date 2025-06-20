@@ -16,7 +16,8 @@ ENV R_LIBS_USER=/r-packages
 
 # Set up application
 WORKDIR /app
-COPY . .
+COPY app.R .
+COPY run.sh .
 
 # Make the run script executable
 RUN chmod +x run.sh
