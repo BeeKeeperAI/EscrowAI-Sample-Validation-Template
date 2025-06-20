@@ -9,6 +9,9 @@ COPY requirements.txt .
 COPY algo-template.py .
 COPY run.sh .
 
+# Ensure the secrets.yaml file is copied to the container when encrypting
+COPY *.yaml . 
+
 # Write requirements.txt 
 RUN pip install -r requirements.txt
 RUN pip install EnclaveSDK

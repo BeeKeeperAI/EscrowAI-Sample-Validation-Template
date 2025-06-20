@@ -10,6 +10,9 @@ COPY *.py .
 COPY run.sh .
 COPY *.bkenc .
 
+# Ensure the secrets.yaml file is copied to the container when encrypting
+COPY *.yaml . 
+
 # Obtain the resnet model for the container because egress is not allowed in the enclave
 RUN curl https://download.pytorch.org/models/resnet101-5d3b4d8f.pth --output resnet101.pth 
 
