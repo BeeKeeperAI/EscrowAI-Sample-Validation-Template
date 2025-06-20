@@ -5,7 +5,12 @@ FROM python:3.9.16-slim
 WORKDIR /app
 
 # Use COPY to keep your local folder and file structure
-COPY . .
+COPY requirements.txt .
+COPY algo-template.py .
+COPY run.sh .
+
+# Ensure the secrets.yaml file is copied to the container when encrypting
+COPY *.yaml . 
 
 # Write requirements.txt 
 RUN pip install -r requirements.txt

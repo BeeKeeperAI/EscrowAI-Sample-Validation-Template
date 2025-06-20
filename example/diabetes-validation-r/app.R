@@ -134,10 +134,8 @@ main <- function() {
             corr_dict[[col_names[i]]] <- row_dict
         }
 
-        result <- toJSON(corr_dict, auto_unbox = TRUE)
-
         # Create and post report
-        escrow_report <- list(report = result)
+        escrow_report <- list(report = corr_dict)
         final_report <- list(
             json_data = escrow_report,
             name = "Diabetes (R) Correlation Report",
