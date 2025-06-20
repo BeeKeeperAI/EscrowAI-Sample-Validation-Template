@@ -530,7 +530,7 @@ def check_data_directory(data_dir: str):
     post_log(f"Checking directory: {data_dir}")
     
     if not os.path.exists(data_dir):
-        post_log(f"Directory does not exist: {data_dir}", status="Error")
+        post_log(f"Directory does not exist: {data_dir}", status="Failed")
         return False
         
     # List all contents
@@ -571,20 +571,25 @@ def main():
         # Initialize the model
         post_log("Initializing ResNet model")
         try:
+            # Create the ResNet101 model architecture first
+            Resnet101 = models.resnet101(weights=None)  # Start with no weights
+            
             if os.path.exists("resnet101.pth"):
-                Resnet101 = torch.load("resnet101.pth")
-                post_log("Loaded pre-trained ResNet101 model from file")
+                # Load the state dictionary (weights) from the downloaded file
+                state_dict = torch.load("resnet101.pth", map_location='cpu')
+                Resnet101.load_state_dict(state_dict)
+                post_log("Loaded pre-trained ResNet101 weights from file")
             else:
                 post_log("Downloading pre-trained ResNet101 model from torchvision")
                 Resnet101 = models.resnet101(weights=models.ResNet101_Weights.DEFAULT)
-                torch.save(Resnet101, "resnet101.pth")
-                post_log("Saved downloaded model to resnet101.pth")
+                # Save the state dictionary for future use
+                torch.save(Resnet101.state_dict(), "resnet101.pth")
+                post_log("Saved downloaded model weights to resnet101.pth")
         except Exception as e:
             post_log(f"Error loading pre-trained model: {str(e)}", status="Failed")
             raise
 
-        # Load and modify model
-        Resnet101 = torch.load("resnet101.pth")
+        # Modify model for fine-tuning
         for param in Resnet101.parameters():
             param.requires_grad = True
         Resnet101.fc = nn.Linear(Resnet101.fc.in_features, len(class_names))
@@ -605,17 +610,17 @@ def main():
             # This is already the default for data_dir, so no change needed if local_data_path matches global data_dir
             if data_dir != local_data_path:
                  # This case should ideally not happen if we standardize on local_data_path for local check
-                 post_log(f"Warning: Global data_dir \"{data_dir}\" differs from local_data_path \"{local_data_path}\". Using {local_data_path}.", status="Warning")
+                 post_log(f"Warning: Global data_dir \"{data_dir}\" differs from local_data_path \"{local_data_path}\". Using {local_data_path}.", status="In Progress")
                  # data_split will use its own data_dir argument, which we will set to local_data_path
                  pass # No direct assignment needed here, but data_split call will use local_data_path value
 
         else:
             post_log(f"Local dataset not found at {local_data_path}. Attempting to fetch via EnclaveSDK.")
             if not sas_url and not enclave_url.startswith("https://localhost"):
-                 post_log("SAS_URL is not configured and ENCLAVE_URL does not look like a local debug endpoint. This is expected in a production enclave. Data must be provisioned by the Data Steward.", status="Info")
+                 post_log("SAS_URL is not configured and ENCLAVE_URL does not look like a local debug endpoint. This is expected in a production enclave. Data must be provisioned by the Data Steward.", status="In Progress")
                  # In a true enclave, files would be pre-provisioned. If list_files returns empty, it means no data from DS.
             elif not sas_url:
-                post_log("SAS_URL is not configured. Cannot fetch data for sandbox/local testing without it if data isn't already present locally.", status="Error")
+                post_log("SAS_URL is not configured. Cannot fetch data for sandbox/local testing without it if data isn't already present locally.", status="Failed")
                 # Potentially raise an error or exit if data is critical and not found locally and no SAS_URL for sandbox
                 raise ValueError("SAS_URL must be set for Sandbox/remote data fetching if local data is not present.")
 
@@ -625,7 +630,7 @@ def main():
             
             files = list_files(sas_url=sas_url)
             if not files:
-                post_log("No files found via EnclaveSDK. Ensure data is uploaded to Azure Blob container for Sandbox or provisioned by Data Steward in enclave.", status="Error")
+                post_log("No files found via EnclaveSDK. Ensure data is uploaded to Azure Blob container for Sandbox or provisioned by Data Steward in enclave.", status="Failed")
                 raise FileNotFoundError("No data files found via EnclaveSDK.")
             post_log(f"Found {len(files)} files to process via EnclaveSDK")
 
@@ -639,11 +644,11 @@ def main():
                         zip_ref.extractall("./") 
                     post_log(f"Successfully extracted {file.name} to ./ ")
                 else:
-                    post_log(f"Failed to download {file.name}", status="Warning")
+                    post_log(f"Failed to download {file.name}", status="In Progress")
             
             # After extraction, the data should be at local_data_path
             if not os.path.exists(local_data_path):
-                post_log(f"Data extraction did not result in expected path: {local_data_path}", status="Error")
+                post_log(f"Data extraction did not result in expected path: {local_data_path}", status="Failed")
                 raise FileNotFoundError(f"Extracted data not found at {local_data_path}")
 
         post_log("Preparing data loaders")
