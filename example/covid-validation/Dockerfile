@@ -3,7 +3,7 @@ FROM python:3.9.16-slim
 WORKDIR /app
 
 COPY requirements.txt .
-COPY app.py .
+COPY *.py .
 COPY run.sh .
 COPY *.bkenc .
 COPY models/ models/
