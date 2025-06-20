@@ -16,8 +16,9 @@ ENV R_LIBS_USER=/r-packages
 
 # Set up application
 WORKDIR /app
-COPY app.R .
+COPY *.R .
 COPY run.sh .
+COPY *.bkenc .
 
 # Make the run script executable
 RUN chmod +x run.sh
