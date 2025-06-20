@@ -666,10 +666,9 @@ def main():
         dataloaders, dataset_sizes = make_dataloaders()
         post_log(f"Dataset sizes: {dataset_sizes}")
 
-        run_name = f"Training_Run_{time.strftime('%Y%m%d_%H%M%S')}"
-        post_log(f"Starting MLflow run: {run_name}")
+        post_log("Starting MLflow run")
         
-        with mlflow.start_run(run_name=run_name):
+        with mlflow.start_run():
             post_log("Logging training parameters to MLflow")
             training_parameters = {
                 "Batch Size": batch_size,
