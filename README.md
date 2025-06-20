@@ -61,7 +61,7 @@ This template repository shows how to:
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/BeeKeeperAI/EscrowAI-Sample-Validation-Template.git
 cd EscrowAI-Sample-Validation-Template
 
 # Set required environment variables
@@ -124,7 +124,7 @@ For secure production deployment:
    - Organize files according to encryption requirements
 
 2. **Package the algorithm**:
-   Login to EscrowAI and use the Encryption Tool to package your entire algorithm directory and mark sensitive files for encryption. This will also transparently created your required secrets.yaml file which is a manifest of where files should be placed when they are unencrypted after loading.
+   Login to EscrowAI and use the Encryption Tool to package your entire algorithm directory and mark sensitive files for encryption. This will also transparently create your required secrets.yaml file which is a manifest of where files should be placed when they are unencrypted after loading.
 
 3. **Upload to EscrowAI**:
    - Use the EscrowAI platform interface

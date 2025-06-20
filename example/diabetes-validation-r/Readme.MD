@@ -16,7 +16,7 @@ This example demonstrates how to perform correlation analysis on diabetes datase
 - Familiarity with statistical correlation analysis
 
 ### Data Requirements
-- Diabetes dataset (example available at: https://www.kaggle.com/datasets/saurabh00007/diabetescsv)
+- **Diabetes Dataset** from Kaggle: [Download here](https://www.kaggle.com/datasets/saurabh00007/diabetescsv)
 - Dataset should be accessible via SAS URL for enclave execution
 - **SAS URL** for accessing blob storage containing the diabetes dataset
 
@@ -233,9 +233,7 @@ This diabetes analysis example can be combined with other examples in this repos
 
 ## Support and Resources
 
-- **EscrowAI Documentation**: [Link to official docs]
 - **Docker Getting Started**: https://docs.docker.com/get-started/
-- **EnclaveSDK Reference**: [Link to SDK docs]
 - **R Documentation**: https://www.r-project.org/
 - **CRAN Package Repository**: https://cran.r-project.org/
 

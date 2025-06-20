@@ -16,7 +16,8 @@ This example demonstrates how to perform COVID-19 diagnosis using deep learning 
 - Familiarity with machine learning and image classification concepts
 
 ### Data Requirements
-- Chest X-ray images (automatically downloaded within the enclave)
+- **COVID-19 Chest X-Ray Dataset** - Example dataset available from:
+  - [COVID-19 Chest X-ray Dataset](https://github.com/ieee8023/covid-chestxray-dataset) (GitHub)
 - Pre-trained COVID-19 detection model (included in the package)
 - **SAS URL** for accessing blob storage containing the X-ray images
 
@@ -30,7 +31,7 @@ The application requires the following environment variables:
 
 This example creates a container that operates within a Trusted Execution Environment to:
 
-1. **Download chest X-ray images** securely using the EnclaveSDK
+1. **Download COVID-19 chest X-ray images** securely using the EnclaveSDK
 2. **Load a pre-trained deep learning model** for COVID-19 detection
 3. **Process the X-ray images** through the diagnostic model
 4. **Generate classification results** (COVID-19 positive/negative)
