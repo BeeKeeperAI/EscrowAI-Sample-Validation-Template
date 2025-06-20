@@ -56,6 +56,10 @@ For testing the application locally before enclave deployment:
 # Navigate to the example directory
 cd example/covid-validation
 
+# Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
 # Install dependencies
 pip install -r requirements.txt
 
@@ -84,7 +88,7 @@ cd example/covid-validation
 docker build -t covid-validation .
 
 # Run the container with environment variables
-docker run --rm \
+docker run --rm --network host \
   -e ENCLAVE_URL="https://enclaveapi.escrow.beekeeperai.com/" \
   -e SAS_URL="your_sas_url_here" \
   covid-validation

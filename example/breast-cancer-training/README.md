@@ -41,6 +41,51 @@ This example trains a breast cancer detection model:
 
 ## Quick Start Guide
 
+### Option 1: Local Development
+For testing the application locally before enclave deployment:
+
+```bash
+# Navigate to the example directory
+cd example/breast-cancer-training
+
+# Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Install MLflow and start tracking server
+pip install mlflow
+
+# Create directories for MLflow storage
+mkdir -p mlflow_data/mlruns mlflow_data/artifacts
+
+# Start MLflow server (keep this running in a separate terminal)
+mlflow server \
+    --backend-store-uri file://$(pwd)/mlflow_data/mlruns \
+    --default-artifact-root file://$(pwd)/mlflow_data/artifacts \
+    --host 0.0.0.0 \
+    --port 5000 &
+
+# Set environment variables (replace with your actual values)
+export ENCLAVE_URL="https://enclaveapi.escrow.beekeeperai.com/"
+export SAS_URL="your_sas_url_here"
+export MLFLOW_TRACKING_URI="http://localhost:5000"
+
+# Run the Python application directly
+python training.py
+```
+
+**Important**: When running locally, you must provide:
+- `SAS_URL`: The Shared Access Signature URL for accessing your data in the blob storage
+- `MLFLOW_TRACKING_URI`: MLflow tracking server URL for experiment logging
+- `ENCLAVE_URL`: The EscrowAI enclave API endpoint (defaults to sandbox if not provided)
+
+**Note**: Local execution connects to the EscrowAI sandbox environment and requires a valid SAS URL for data access.
+
+### Option 2: Docker Container
+
 ### Step 1: Start MLflow Server
 
 First, install MLflow and start the tracking server:

@@ -41,8 +41,7 @@ This example uses BeeKeeperAI's EnclaveAPI to securely analyze diabetes data wit
 1. **`Dockerfile`** - Container environment configuration for R and dependencies
 2. **`run.sh`** - Entry point script that launches the R application
 3. **`app.R`** - Main R script that performs correlation analysis using EnclaveAPI
-4. **`requirements.txt`** - R package dependencies (if applicable)
-5. **`schema.json`** - Validation criteria for output reports ensuring data quality. In sandbox testing, this is passed as a value to validate reports. In EscrowAI production, this is loaded as validation criteria for the enclave.
+4. **`schema.json`** - Validation criteria for output reports ensuring data quality. In sandbox testing, this is passed as a value to validate reports. In EscrowAI production, this is loaded as validation criteria for the enclave.
 
 ## How to Run This Example
 
@@ -53,11 +52,11 @@ For testing the R application locally before enclave deployment:
 # Navigate to the example directory
 cd example/diabetes-validation-r
 
-# Install R dependencies (if running outside Docker)
-# R packages are installed automatically by the script
+# Note: R uses its own package management system, not Python virtual environments
+# R packages are installed automatically by the script to the system R library
 
 # Set environment variables (replace with your actual values)
-export ENCLAVE_URL="https://enclaveapi.escrow.beekeeperai.com"
+export ENCLAVE_URL="https://enclaveapi.escrow.beekeeperai.com/"
 export SAS_URL="your_sas_url_here"
 
 # Run the application
@@ -81,8 +80,8 @@ cd example/diabetes-validation-r
 docker build -t diabetes-analysis-r .
 
 # Run the container with environment variables
-docker run --rm \
-  -e ENCLAVE_URL="https://enclaveapi.escrow.beekeeperai.com" \
+docker run --rm --network host \
+  -e ENCLAVE_URL="https://enclaveapi.escrow.beekeeperai.com/" \
   -e SAS_URL="your_sas_url_here" \
   diabetes-analysis-r
 ```
@@ -91,6 +90,7 @@ docker run --rm \
 - Replace `your_sas_url_here` with your actual SAS URL for blob storage access
 - The `ENCLAVE_URL` points to the EscrowAI API endpoint
 - Use `--rm` flag to automatically clean up the container after execution
+- Use `--network host` to allow container access to host services
 
 ### Option 3: EscrowAI Enclave (Production)
 For production deployment in the secure enclave:
@@ -98,7 +98,6 @@ For production deployment in the secure enclave:
 1. **Prepare files for encryption**: 
    - Identify sensitive files like `app.R` and correlation analysis scripts for encryption
    - Keep `Dockerfile` and `run.sh` unencrypted (required by build system)
-   - Keep `requirements.txt` unencrypted if referenced directly in Dockerfile
 
 2. **Package the algorithm**: 
    Login to EscrowAI and use the Encryption Tool to package your entire algorithm directory and mark sensitive files for encryption. This will also transparently create your required secrets.yaml file which is a manifest of where files should be placed when they are unencrypted after loading.
@@ -173,7 +172,7 @@ docker build -t test-diabetes-analysis .
 R --version
 
 # Test R package availability
-R -e "library(corrplot); library(jsonlite); print('R packages loaded successfully')"
+R -e "library(httr); library(dplyr); library(openssl); print('R packages loaded successfully')"
 
 # Test SAS URL format (basic check)
 echo $SAS_URL | grep -q "https://" && echo "SAS URL format looks correct" || echo "SAS URL may be malformed"
@@ -210,7 +209,7 @@ source("app.R")
 - The Docker container automatically installs required R packages
 - For local development, ensure you have the necessary packages installed:
   ```r
-  install.packages(c("jsonlite", "corrplot", "httr"))
+  install.packages(c("httr", "dplyr", "openssl"))
   ```
 
 ### Memory Management
@@ -237,4 +236,4 @@ This diabetes analysis example can be combined with other examples in this repos
 - **R Documentation**: https://www.r-project.org/
 - **CRAN Package Repository**: https://cran.r-project.org/
 
-For technical support, contact BeeKeeperAI.
+For technical support, contact BeeKeeperAI. 
