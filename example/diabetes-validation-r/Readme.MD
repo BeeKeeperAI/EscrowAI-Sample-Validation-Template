@@ -17,6 +17,13 @@ This example demonstrates how to perform correlation analysis on diabetes datase
 ### Data Requirements
 - Diabetes dataset (example available at: https://www.kaggle.com/datasets/saurabh00007/diabetescsv)
 - Dataset should be accessible via SAS URL for enclave execution
+- SAS URL for accessing blob storage containing the diabetes dataset
+
+### Environment Variables
+The application requires the following environment variables:
+
+- **`SAS_URL`** (Required): Shared Access Signature URL for accessing your blob storage containing the diabetes dataset
+- **`ENCLAVE_URL`** (Optional): EscrowAI enclave API endpoint. Defaults to `https://enclaveapi.escrow.beekeeperai.com/` if not provided
 
 ## What This Example Does
 
@@ -42,11 +49,21 @@ This example uses BeeKeeperAI's EnclaveAPI to securely analyze diabetes data wit
 ### Option 1: Local Development
 For testing the R application locally before enclave deployment:
 
-1. Edit the `run.sh` script to include your SAS URL for data access
-2. Run the application:
-   ```bash
-   bash run.sh
-   ```
+```bash
+# Install R dependencies (if running outside Docker)
+# R packages are installed automatically by the script
+
+# Set environment variables (replace with your actual values)
+export ENCLAVE_URL="https://enclaveapi.escrow.beekeeperai.com"
+export SAS_URL="your_sas_url_here"
+
+# Run the application
+bash run.sh
+```
+
+**Important**: When running locally, you must provide:
+- `SAS_URL`: The Shared Access Signature URL for accessing your diabetes dataset in blob storage
+- `ENCLAVE_URL`: The EscrowAI enclave API endpoint (defaults to sandbox if not provided)
 
 ### Option 2: Docker Container
 Build and run the containerized version:
@@ -55,9 +72,16 @@ Build and run the containerized version:
 # Build the Docker image
 docker build -t diabetes-analysis-r .
 
-# Run the container
-docker run --rm diabetes-analysis-r
+# Run the container with environment variables
+docker run --rm \
+  -e ENCLAVE_URL="https://enclaveapi.escrow.beekeeperai.com" \
+  -e SAS_URL="your_sas_url_here" \
+  diabetes-analysis-r
 ```
+
+**Important**: When running in Docker, you must pass the environment variables:
+- `-e SAS_URL="your_sas_url_here"`: Replace with your actual SAS URL for blob storage access
+- `-e ENCLAVE_URL="https://enclaveapi.escrow.beekeeperai.com"`: The EscrowAI API endpoint
 
 ### Option 3: EscrowAI Enclave
 For production deployment in the secure enclave:
@@ -78,7 +102,12 @@ Upon successful execution, you should see:
 
 ## Troubleshooting
 
-- **Data access issues**: Verify your SAS URL is correctly configured and has appropriate permissions
+- **SAS URL issues**: 
+  - Ensure the `SAS_URL` environment variable is properly set and contains a valid Shared Access Signature URL
+  - Verify that the SAS URL has read and list permissions for the blob storage container
+  - Check that the SAS URL has not expired
+  - Confirm the diabetes dataset is properly uploaded to the blob storage
 - **R package errors**: Ensure all required R packages are installed and compatible
 - **Docker build failures**: Check that Docker daemon is running and you have sufficient permissions
 - **Schema validation errors**: Review the output format against the `schema.json` requirements
+- **Environment variable errors**: Ensure all required environment variables (`SAS_URL`) are set before running the application

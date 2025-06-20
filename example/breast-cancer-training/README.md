@@ -24,6 +24,14 @@ This example demonstrates how to train a deep learning model for breast cancer d
   ├── malignant/
   └── normal/
   ```
+- SAS URL for accessing dataset in blob storage (for sandbox/enclave execution)
+
+### Environment Variables
+The application requires the following environment variables:
+
+- **`SAS_URL`** (Optional for local, Required for sandbox): Shared Access Signature URL for accessing your blob storage containing the dataset zip file
+- **`ENCLAVE_URL`** (Optional): EscrowAI enclave API endpoint. Defaults to `https://enclaveapi.escrow.beekeeperai.com/` if not provided
+- **`MLFLOW_TRACKING_URI`** (Required): MLflow tracking server URL for experiment logging
 
 ## What This Example Does
 
@@ -94,8 +102,14 @@ For testing and development:
 
 3. **Configure environment variables**:
    ```bash
-   export MLFLOW_TRACKING_URI="http://localhost:5000"  # Point to your local MLflow server
-   export ENCLAVE_URL="https://enclaveapi.escrow.beekeeperai.com"  # Default sandbox
+   # Required: MLflow tracking server
+   export MLFLOW_TRACKING_URI="http://localhost:5000"
+   
+   # Optional: EscrowAI API endpoint (defaults to sandbox)
+   export ENCLAVE_URL="https://enclaveapi.escrow.beekeeperai.com"
+   
+   # Optional: For sandbox data download (replace with your actual SAS URL)
+   export SAS_URL="your_sas_url_for_dataset_zip"
    ```
 
 4. **Run training**:
@@ -103,10 +117,13 @@ For testing and development:
    # With local dataset (place Dataset_BUSI_with_GT in project root)
    python training.py
    
-   # Or with sandbox data download
-   export SAS_URL="your_sas_url_for_dataset_zip"
+   # Or with sandbox data download (ensure SAS_URL is set)
    python training.py
    ```
+
+   **Important**: When using sandbox data download, you must provide:
+   - `SAS_URL`: The Shared Access Signature URL for accessing your dataset zip file in blob storage
+   - The SAS URL must have read and list permissions for the blob storage container
 
    **Note**: Keep the MLflow server running in a separate terminal while training. You can monitor the training progress by opening http://localhost:5000 in your browser.
 
@@ -121,12 +138,14 @@ docker build -t breast-cancer-training .
 docker run --rm \
     -v "$(pwd)/Dataset_BUSI_with_GT:/app/Dataset_BUSI_with_GT" \
     -e MLFLOW_TRACKING_URI="http://your-mlflow-server:5000" \
+    -e ENCLAVE_URL="https://enclaveapi.escrow.beekeeperai.com" \
     breast-cancer-training
 
 # Run with sandbox data download
 docker run --rm \
     -e SAS_URL="your_sas_url_for_dataset_zip" \
     -e MLFLOW_TRACKING_URI="http://your-mlflow-server:5000" \
+    -e ENCLAVE_URL="https://enclaveapi.escrow.beekeeperai.com" \
     breast-cancer-training
 ```
 
@@ -178,9 +197,14 @@ The training script logs comprehensive metrics to MLflow:
 
 ### Data and Training Issues
 - **Data not found**: Ensure `Dataset_BUSI_with_GT` is in the project root with correct structure
-- **Sandbox data download**: Check `SAS_URL` permissions and verify zip file structure in blob storage
+- **SAS URL issues**: 
+  - Ensure the `SAS_URL` environment variable is properly set and contains a valid Shared Access Signature URL
+  - Verify that the SAS URL has read and list permissions for the blob storage container
+  - Check that the SAS URL has not expired
+  - Verify zip file structure in blob storage matches expected dataset format
 - **CUDA/GPU issues**: The script automatically detects and uses available GPU acceleration
 - **Memory errors**: Reduce batch size in the training script if encountering out-of-memory errors
+- **Environment variable errors**: Ensure all required environment variables (`MLFLOW_TRACKING_URI`) are set before running the application
 
 ### Quick MLflow Setup Check
 ```bash
