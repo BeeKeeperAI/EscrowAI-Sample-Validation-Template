@@ -57,13 +57,48 @@ For testing and development:
    pip install -r requirements.txt
    ```
 
-2. **Configure environment variables**:
+2. **Start MLflow Tracking Server** (required for local development):
+   
+   **Option A: Simple local MLflow server**
    ```bash
-   export MLFLOW_TRACKING_URI="http://your-mlflow-server:5000"
+   # In a separate terminal window, start MLflow server
+   mlflow server --host 0.0.0.0 --port 5000
+   
+   # Server will be available at http://localhost:5000
+   # MLflow UI will show experiments and runs
+   ```
+   
+   **Option B: MLflow with file store and artifact store**
+   ```bash
+   # Create directories for MLflow storage
+   mkdir -p mlflow_data/mlruns mlflow_data/artifacts
+   
+   # Start MLflow server with specific storage locations
+   mlflow server \
+       --backend-store-uri file:///$(pwd)/mlflow_data/mlruns \
+       --default-artifact-root file:///$(pwd)/mlflow_data/artifacts \
+       --host 0.0.0.0 \
+       --port 5000
+   ```
+   
+   **Option C: Using Docker for MLflow**
+   ```bash
+   # Run MLflow server in Docker container
+   docker run -d \
+       --name mlflow-server \
+       -p 5000:5000 \
+       -v $(pwd)/mlflow_data:/mlflow \
+       python:3.9-slim \
+       bash -c "pip install mlflow && mlflow server --host 0.0.0.0 --backend-store-uri file:///mlflow/mlruns --default-artifact-root file:///mlflow/artifacts"
+   ```
+
+3. **Configure environment variables**:
+   ```bash
+   export MLFLOW_TRACKING_URI="http://localhost:5000"  # Point to your local MLflow server
    export ENCLAVE_URL="https://enclaveapi.escrow.beekeeperai.com"  # Default sandbox
    ```
 
-3. **Run training**:
+4. **Run training**:
    ```bash
    # With local dataset (place Dataset_BUSI_with_GT in project root)
    python training.py
@@ -72,6 +107,8 @@ For testing and development:
    export SAS_URL="your_sas_url_for_dataset_zip"
    python training.py
    ```
+
+   **Note**: Keep the MLflow server running in a separate terminal while training. You can monitor the training progress by opening http://localhost:5000 in your browser.
 
 ### Option 2: Docker Container
 Build and run the containerized version:
@@ -122,10 +159,36 @@ The training script logs comprehensive metrics to MLflow:
 
 ## Troubleshooting
 
-- **MLflow connection issues**: Verify `MLFLOW_TRACKING_URI` is accessible from your execution environment
+### MLflow Issues
+- **MLflow server not running**: Ensure MLflow server is started before running training
+  ```bash
+  # Check if MLflow server is running
+  curl http://localhost:5000/health
+  
+  # If not running, start it:
+  mlflow server --host 0.0.0.0 --port 5000
+  ```
+- **MLflow connection issues**: 
+  - Verify `MLFLOW_TRACKING_URI` matches your running MLflow server URL
+  - Check firewall settings allow connections to port 5000
+  - For Docker MLflow: ensure container is running with `docker ps`
+- **MLflow UI not accessible**: 
+  - Visit http://localhost:5000 in your browser
+  - If using Docker, check port mapping with `docker port mlflow-server`
+
+### Data and Training Issues
 - **Data not found**: Ensure `Dataset_BUSI_with_GT` is in the project root with correct structure
 - **Sandbox data download**: Check `SAS_URL` permissions and verify zip file structure in blob storage
 - **CUDA/GPU issues**: The script automatically detects and uses available GPU acceleration
 - **Memory errors**: Reduce batch size in the training script if encountering out-of-memory errors
+
+### Quick MLflow Setup Check
+```bash
+# Verify MLflow installation
+pip show mlflow
+
+# Test MLflow server connectivity
+python -c "import mlflow; print('MLflow client can connect:', mlflow.get_tracking_uri())"
+```
 
 For detailed configuration options and advanced usage, refer to the inline documentation in `training.py`.

@@ -59,6 +59,24 @@ sample-validation-template/
 
 When pointing the EnclaveSDK to the Enclave Sandbox (enclaveapi.escrow.beekeeperai.com), you can perform the set of example API calls provided in this repository locally before deploying in EscrowAI. The code has the configuration required to point at the Enclave Sandbox and you need to uncomment those configurations to point at the sandbox. This system is under active development and is presented as-is.
 
+### Providing a SAS URL for Testing
+
+To successfully test the algorithm template with actual data, you need to provide a SAS (Shared Access Signature) URL that points to your test data storage. The `algo-template.py` is configured to use a SAS URL through an environment variable.
+
+**Setting up the SAS URL:**
+
+1. **Environment Variable**: Set the `SAS_URL` environment variable with your blob storage SAS URL:
+   ```bash
+   export SAS_URL="https://yourstorageaccount.blob.core.windows.net/yourcontainer?sv=2022-11-02&ss=b&srt=sco&sp=r&se=2024-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=YourSignatureHere"
+   ```
+
+2. **Running the test**: After setting the environment variable, run your algorithm:
+   ```bash
+   python algo-template.py
+   ```
+
+**Note**: If no SAS URL is provided, calls related to the SAS URL will fail.
+
 ## Preparing to Encrypt Your Secrets
 
 When you are preparing to upload your code to EscrowAI, you will use EscrowAI's encryption utility and provide a Content Encryption Key (CEK) and select the files in your algorithm package you deem secret. It is critical to remember that the system that builds your algorithm package relies on an unencrypted Dockerfile and requires any referenced file in your Dockerfile to be unencrypted as well. For example, a reference to a secret file as an entrypoint for your algorithm should be wrapped with a script like [run.sh](run.sh). References to files that need to be placed into your container using something like `COPY` should not be referenced directly, but instead should be referenced by the folder they are inside and are destined for (e.g., `COPY mysecretfolder /app/mysecretfolder`).
