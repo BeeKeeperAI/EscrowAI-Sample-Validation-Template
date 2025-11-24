@@ -33,3 +33,24 @@ Never check secrets into source control. Use CI secret stores or environment var
 ## License
 
 Provided as an example template for escrow / Enclave integration.
+
+## Supported File Extensions and MIME Types
+
+The supported file types are grouped by category below for easier maintenance and readability.
+
+## Document Formats
+
+| File Type | Extensions | MIME Type |
+|-----------|------------|-----------|
+| PDF | .pdf | application/pdf |
+| JSON | .json | application/json |
+| XML | .xml | application/xml |
+| Plain Text | .txt | text/plain |
+
+## Image Formats
+
+| File Type | Extensions | MIME Type |
+|-----------|------------|-----------|
+| JPEG Image | .jpg, .jpeg | image/jpeg |
+| PNG Image | .png | image/png |
+| Bitmap Image | .bmp | image/bmp |
