@@ -1,2 +1,2 @@
-fastai
-EnclaveSDK==1.5.8
+Pillow>=9.0.0
+EnclaveSDK==2.1.1.dev45480
