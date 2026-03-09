@@ -8,6 +8,9 @@ from PIL import Image
 import EnclaveSDK
 from EnclaveSDK import File, LogData
 
+# Add Report import
+from EnclaveSDK import Report
+
 # Configuration
 configuration = EnclaveSDK.Configuration(os.getenv("ENCLAVE_URL", "https://enclaveapi.escrow.beekeeperai.com/"))
 sas_url = os.getenv("SAS_URL", None) 
@@ -172,6 +175,19 @@ def get_original_filename(encrypted_filename: str) -> str:
         return encrypted_filename[:-6]
     return encrypted_filename
 
+def post_report(finalReport: Dict) -> Dict:
+    """Post a report using the Report API"""
+    api_instance = EnclaveSDK.ReportApi(api_client)
+    
+    # Check if schema.json is available and read it into json_schema
+    if os.path.exists("schema.json"):
+        with open("schema.json", "r") as schema:
+            finalReport['json_schema'] = EnclaveSDK.ReportJsonSchema.from_dict(json.load(schema))
+    
+    report = Report.from_dict(finalReport)
+    api_response = api_instance.api_v1_report_post(report)
+    return api_response
+
 def main():
     post_log({"message": "Starting image standardization process", "status": "In Progress"})
     
@@ -266,6 +282,39 @@ def main():
         "message": f"Image standardization complete - Processed: {processed_count}, Skipped: {skipped_count}, Errors: {error_count}",
         "status": "Completed"
     })
+    
+    # Generate and post report
+    report_data = {
+        "total_files_read": len(files),
+        "total_files_processed": processed_count,
+        "files_skipped": skipped_count,
+        "files_errored": error_count,
+        "standard_dimensions": f"{STANDARD_WIDTH}x{STANDARD_HEIGHT}",
+        "processing_summary": {
+            "success_rate": round((processed_count / len(files) * 100), 2) if len(files) > 0 else 0,
+            "total_files": len(files),
+            "successful": processed_count,
+            "skipped": skipped_count,
+            "errors": error_count
+        }
+    }
+    
+    # Wrap in "report" key to match validation schema
+    finalReport = {
+        "json_data": {
+            "report": report_data
+        },
+        "name": "Image Standardization Report",
+        "status": "Completed"
+    }
+    
+    post_log({"message": f"Posting report: {json.dumps(report_data, indent=2)}", "status": "In Progress"})
+    
+    try:
+        post_report(finalReport)
+        post_log({"message": "Report posted successfully", "status": "Completed"})
+    except Exception as e:
+        post_log({"message": f"Failed to post report: {str(e)}", "status": "Failed"})
 
 if __name__ == "__main__":
     try:

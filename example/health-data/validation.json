@@ -1,0 +1,67 @@
+{
+  "report": {
+    "type": "dict",
+    "schema": {
+      "total_records": {
+        "type": "integer",
+        "min": 0
+      },
+      "age_gender_distribution": {
+        "type": "dict",
+        "valueschema": {
+          "type": "dict",
+          "schema": {
+            "0–12": {
+              "type": "integer",
+              "min": 0
+            },
+            "13–18": {
+              "type": "integer",
+              "min": 0
+            },
+            "19–30": {
+              "type": "integer",
+              "min": 0
+            },
+            "31–45": {
+              "type": "integer",
+              "min": 0
+            },
+            "46–60": {
+              "type": "integer",
+              "min": 0
+            },
+            "61–75": {
+              "type": "integer",
+              "min": 0
+            },
+            "76+": {
+              "type": "integer",
+              "min": 0
+            }
+          }
+        }
+      },
+      "summary": {
+        "type": "dict",
+        "schema": {
+          "unique_genders": {
+            "type": "integer",
+            "min": 0
+          },
+          "age_buckets": {
+            "type": "integer",
+            "min": 0
+          },
+          "gender_totals": {
+            "type": "dict",
+            "valueschema": {
+              "type": "integer",
+              "min": 0
+            }
+          }
+        }
+      }
+    }
+  }
+}

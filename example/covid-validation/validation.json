@@ -1,0 +1,52 @@
+{
+  "report": {
+    "type": "dict",
+    "schema": {
+      "total_files_read": {
+        "type": "integer",
+        "min": 0
+      },
+      "total_files_processed": {
+        "type": "integer",
+        "min": 0
+      },
+      "files_skipped": {
+        "type": "integer",
+        "min": 0
+      },
+      "files_errored": {
+        "type": "integer",
+        "min": 0
+      },
+      "standard_dimensions": {
+        "type": "string"
+      },
+      "processing_summary": {
+        "type": "dict",
+        "schema": {
+          "success_rate": {
+            "type": "float",
+            "min": 0,
+            "max": 100
+          },
+          "total_files": {
+            "type": "integer",
+            "min": 0
+          },
+          "successful": {
+            "type": "integer",
+            "min": 0
+          },
+          "skipped": {
+            "type": "integer",
+            "min": 0
+          },
+          "errors": {
+            "type": "integer",
+            "min": 0
+          }
+        }
+      }
+    }
+  }
+}
