@@ -1,3 +1,4 @@
+    
 import io
 import os
 import json
@@ -280,7 +281,7 @@ def main():
     # Log final summary
     post_log({
         "message": f"Image standardization complete - Processed: {processed_count}, Skipped: {skipped_count}, Errors: {error_count}",
-        "status": "In Progress"
+        "status": "Completed"
     })
     
     # Generate and post report
@@ -305,14 +306,14 @@ def main():
             "report": report_data
         },
         "name": "Image Standardization Report",
-        "status": "In Progress"
+        "status": "Completed"
     }
     
-    post_log({"message": f"Final report: {json.dumps(finalReport, indent=2, default=str)}", "status": "In Progress"})
+    post_log({"message": f"Posting report: {json.dumps(report_data, indent=2)}", "status": "In Progress"})
     
     try:
         post_report(finalReport)
-        post_log({"message": "Report posted successfully", "status": "In Progress"})
+        post_log({"message": "Report posted successfully", "status": "Completed"})
     except Exception as e:
         post_log({"message": f"Failed to post report: {str(e)}", "status": "Failed"})
 

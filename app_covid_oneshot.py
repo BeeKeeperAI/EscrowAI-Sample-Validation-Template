@@ -305,16 +305,10 @@ def main():
             "report": report_data
         },
         "name": "Image Standardization Report",
-        "status": "In Progress"
+        "status": "Completed"
     }
     
     post_log({"message": f"Final report: {json.dumps(finalReport, indent=2, default=str)}", "status": "In Progress"})
-    
-    try:
-        post_report(finalReport)
-        post_log({"message": "Report posted successfully", "status": "In Progress"})
-    except Exception as e:
-        post_log({"message": f"Failed to post report: {str(e)}", "status": "Failed"})
 
 if __name__ == "__main__":
     try:
