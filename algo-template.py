@@ -40,7 +40,10 @@ def main():
     ###
     api_report_instance = EnclaveSDK.ReportApi(api_client)
     report = {"json_data": {"report": "Performance Report"},
-              "json_schema": { "report": { "type": "string", "allowed": [ "Performance Report" ] } },
+              "json_schema": { 
+                "report": { "type": "string",
+               "allowed": [ "Performance Report" ] } 
+               },
               "name": "EscrowAI Algorithm Package", 
               "status": "Completed"}
     api_response = api_report_instance.api_v1_validate_post(EnclaveSDK.Report.from_dict(report))
