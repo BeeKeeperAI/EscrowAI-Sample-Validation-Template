@@ -54,7 +54,7 @@ pexpect==4.9.0
 Pillow==10.3.0
 platformdirs==4.0.0
 prompt-toolkit==3.0.41
-protobuf==4.25.1
+protobuf==4.25.8
 psutil==5.9.6
 ptyprocess==0.7.0
 pure-eval==0.2.2
