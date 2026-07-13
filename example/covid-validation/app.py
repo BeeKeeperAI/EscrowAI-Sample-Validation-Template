@@ -57,7 +57,7 @@ def post_report(finalReport: Dict) -> Dict:
     # Check if schema.json is available and read it into json_schema
     if os.path.exists("schema.json"):
         with open("schema.json", "r") as schema:
-            finalReport['json_schema'] = EnclaveSDK.ReportJsonSchema.from_dict(json.load(schema))
+            finalReport['json_schema'] = json.load(schema)
 
     # Use the Report model to create a report object for posting
     # the posted report will be validated against the DS-provided
