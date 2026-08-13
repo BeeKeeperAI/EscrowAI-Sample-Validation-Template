@@ -9,6 +9,7 @@ COPY requirements.txt .
 COPY *.py .
 COPY run.sh .
 COPY *.bkenc .
+COPY *.json .
 
 # Ensure the secrets.yaml file is copied to the container when encrypting
 COPY *.yaml . 
