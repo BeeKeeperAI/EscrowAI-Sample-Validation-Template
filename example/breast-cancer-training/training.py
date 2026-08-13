@@ -503,13 +503,21 @@ def training_loop(
         pd.DataFrame(classification_rep).iloc[:-1, :]
     )  # Display without support and avg/total rows
 
-    signature = infer_signature(inputs.cpu().numpy(), outputs.cpu().detach().numpy())
+    # Log only a single sample as the input example; storing the full batch
+    # bloats the logged model artifact (tens of MB for image inputs).
+    input_example = inputs[:1].cpu().numpy()
+    signature = infer_signature(input_example, outputs[:1].cpu().detach().numpy())
 
     model_info = mlflow.pytorch.log_model(
         model,
         "model",
         registered_model_name="BreastCancerPytorchModel",
         signature=signature,
+        input_example=input_example,
+        # Use the non-traced "pickle" serialization format. The new "pt2"
+        # default traces model.forward with input_example, which can fail on
+        # CPU/GPU device mismatches; "pickle" works in all environments.
+        serialization_format="pickle",
         metadata=training_parameters,
     )
 
@@ -682,7 +690,7 @@ def main():
             mlflow.log_params(training_parameters)
 
             post_log("Initializing model and starting training")
-            model, model_info, class_rep = training_loop(
+            _, _, class_rep = training_loop(
                 Resnet_fineTuning,
                 Loss_Function,
                 optimizer,
@@ -705,12 +713,8 @@ def main():
                             mlflow.log_metric(metric_key, value)
                             post_log(f"Logged metric: {metric_key} = {value}")
 
-            post_log("Saving model to MLflow")
-            mlflow.pytorch.log_model(model, "breast_cancer_model")
-
-            if os.path.exists("training_plot.png"):
-                post_log("Logging training plot")
-                mlflow.log_artifact("training_plot.png")
+            # Model is already logged and registered inside training_loop()
+            # with a signature, input example, and metadata.
 
         post_log("Preparing final report")
         finalReport = {

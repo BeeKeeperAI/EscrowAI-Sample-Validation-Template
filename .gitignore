@@ -2,3 +2,6 @@
 venv
 mlruns
 *.pth
+breast-cancer-training-model*
+create-your-model.md
+wine-training-model-example.md
